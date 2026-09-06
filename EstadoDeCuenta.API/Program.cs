@@ -1,4 +1,6 @@
+using EstadoDeCuenta.Domain.Interfaces;
 using EstadoDeCuenta.Infrastructure.Data;
+using EstadoDeCuenta.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDBContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<ICardRepository, CardRepository>();
+builder.Services.AddScoped<IMovementRepository, MovementRepository>();
 
 var app = builder.Build();
 
