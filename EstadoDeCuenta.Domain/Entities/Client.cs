@@ -9,7 +9,7 @@ namespace EstadoDeCuenta.Domain.Entities
     public class Client
     {
         public int ClientId { get; set; }
-        public int ClientName { get; set; }
+        public string ClientName { get; set; }
         public ICollection<Card> Cards { get; set; } = new List<Card>();
     }
 }
