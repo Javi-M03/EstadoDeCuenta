@@ -1,6 +1,7 @@
 using EstadoDeCuenta.Domain.Interfaces;
 using EstadoDeCuenta.Infrastructure.Data;
 using EstadoDeCuenta.Infrastructure.Repositories;
+using EstadoDeCuenta.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IMovementRepository, MovementRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 

@@ -19,6 +19,7 @@ namespace EstadoDeCuenta.DTOs.Statemets
         public decimal BonusInterest { get; set; }
         public decimal MinimumPayment { get; set; }
         public decimal TotalPayment { get; set; }
+        public decimal TotalPaymentWithInterest { get; set; }
         public IEnumerable<MovementResponseDto> Movements { get; set; } 
             = new List<MovementResponseDto>();
     }

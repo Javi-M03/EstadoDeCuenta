@@ -45,8 +45,7 @@ namespace EstadoDeCuenta.Infrastructure.Repositories
         public async Task<Movement> AddAsync(Movement movement)
         {
             await _context.Movements.AddAsync(movement);
-            await _context.SaveChangesAsync();
-
+            
             return movement;
         }
     }
