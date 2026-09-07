@@ -17,8 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CQRS\" />
-    <Folder Include="Validators\" />
+    <Folder Include="CQRS\Commands\CreatePayment\" />
   </ItemGroup>
 
 </Project>

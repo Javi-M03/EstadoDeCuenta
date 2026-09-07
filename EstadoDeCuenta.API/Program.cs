@@ -1,7 +1,10 @@
 using EstadoDeCuenta.Domain.Interfaces;
+using EstadoDeCuenta.DTOs.Movements;
 using EstadoDeCuenta.Infrastructure.Data;
 using EstadoDeCuenta.Infrastructure.Repositories;
 using EstadoDeCuenta.Infrastructure.UnitOfWork;
+using EstadoDeCuenta.Services.CQRS;
+using EstadoDeCuenta.Services.CQRS.Commands.CreateMovement;
 using EstadoDeCuenta.Services.Mapping;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +26,7 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IMovementRepository, MovementRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICommandHandler<CreateMovementCommand, MovementResponseDto>,CreateMovementCommandHandler>();
 
 var app = builder.Build();
 
