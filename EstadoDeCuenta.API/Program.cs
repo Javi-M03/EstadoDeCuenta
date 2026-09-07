@@ -7,6 +7,7 @@ using EstadoDeCuenta.Services.CQRS;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateMovement;
 using EstadoDeCuenta.Services.Mapping;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -27,6 +28,7 @@ builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IMovementRepository, MovementRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICommandHandler<CreateMovementCommand, MovementResponseDto>,CreateMovementCommandHandler>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateMovementCommandValidator>();
 
 var app = builder.Build();
 
