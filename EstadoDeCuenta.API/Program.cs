@@ -2,6 +2,7 @@ using EstadoDeCuenta.Domain.Interfaces;
 using EstadoDeCuenta.DTOs.Cards;
 using EstadoDeCuenta.DTOs.Clients;
 using EstadoDeCuenta.DTOs.Movements;
+using EstadoDeCuenta.DTOs.Statemets;
 using EstadoDeCuenta.Infrastructure.Data;
 using EstadoDeCuenta.Infrastructure.Repositories;
 using EstadoDeCuenta.Infrastructure.UnitOfWork;
@@ -15,9 +16,11 @@ using EstadoDeCuenta.Services.CQRS.Queries.Cards.GetMovementsByCardId;
 using EstadoDeCuenta.Services.CQRS.Queries.Clients.GetCardsByClientId;
 using EstadoDeCuenta.Services.CQRS.Queries.Clients.GetClientById;
 using EstadoDeCuenta.Services.CQRS.Queries.Clients.GetClients;
+using EstadoDeCuenta.Services.CQRS.Queries.GetCardStatements;
 using EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovementById;
 using EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovements;
 using EstadoDeCuenta.Services.Mapping;
+using EstadoDeCuenta.Services.Services;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +42,7 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IMovementRepository, MovementRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<AccountStatementCalculator>();
 builder.Services.AddScoped<ICommandHandler<CreateMovementCommand, MovementResponseDto>, CreateMovementCommandHandler>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateMovementCommandValidator>();
 builder.Services.AddScoped<ICommandHandler<CreateClientCommand, ClientResponseDto>, CreateClientCommandHandler>();
@@ -51,6 +55,7 @@ builder.Services.AddScoped<IQueryHandler<GetCardByIdQuery, CardResponseDto>,GetC
 builder.Services.AddScoped<IQueryHandler<GetMovementByIdQuery, MovementResponseDto>,GetMovementByIdQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetCardsByClientIdQuery,IEnumerable<CardResponseDto>>, GetCardsByClientIdQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetMovementsByCardIdQuery,IEnumerable<MovementResponseDto>>, GetMovementsByCardIdQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetCardStatementQuery, AccountStatementDto>, GetCardStatementQueryHandler>();
 
 var app = builder.Build();
 
