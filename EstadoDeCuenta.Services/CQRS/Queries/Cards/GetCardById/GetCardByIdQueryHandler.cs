@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstadoDeCuenta.Services.CQRS.Queries.GetCards
+namespace EstadoDeCuenta.Services.CQRS.Queries.Cards.GetCardById
 {
     public class GetCardByIdQueryHandler : IQueryHandler<GetCardByIdQuery, CardResponseDto>
     {

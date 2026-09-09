@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstadoDeCuenta.Services.CQRS.Queries.GetCards
+namespace EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovements
 {
-    public class GetCardsQuery
+    public class GetMovementsQuery
     {
     }
 }

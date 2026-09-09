@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using EstadoDeCuenta.DTOs.Cards;
 using EstadoDeCuenta.DTOs.Clients;
 using EstadoDeCuenta.Services.CQRS;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateClient;
-using EstadoDeCuenta.Services.CQRS.Queries.GetClients;
+using EstadoDeCuenta.Services.CQRS.Queries.Clients.GetCardsByClientId;
+using EstadoDeCuenta.Services.CQRS.Queries.Clients.GetClientById;
+using EstadoDeCuenta.Services.CQRS.Queries.Clients.GetClients;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstadoDeCuenta.API.Controllers
@@ -15,18 +18,20 @@ namespace EstadoDeCuenta.API.Controllers
         private readonly ICommandHandler<CreateClientCommand, ClientResponseDto> _handler;
         private readonly IQueryHandler<GetClientsQuery, IEnumerable<ClientResponseDto>> _getHandler;
         private readonly IQueryHandler<GetClientByIdQuery, ClientResponseDto> _getByIdHandler;
+        private readonly IQueryHandler<GetCardsByClientIdQuery, IEnumerable<CardResponseDto>> _getCardsHandler;
 
         public ClientsController(
             IMapper mapper,
             ICommandHandler<CreateClientCommand, ClientResponseDto> handler,
             IQueryHandler<GetClientsQuery, IEnumerable<ClientResponseDto>> getHandler,
-            IQueryHandler<GetClientByIdQuery, ClientResponseDto> getByIdHandler
-            )
+            IQueryHandler<GetClientByIdQuery, ClientResponseDto> getByIdHandler,
+            IQueryHandler<GetCardsByClientIdQuery, IEnumerable<CardResponseDto>> getCardsHandler)
         {
             _mapper = mapper;
             _handler = handler;
             _getHandler = getHandler;
             _getByIdHandler = getByIdHandler;
+            _getCardsHandler = getCardsHandler;
         }
         
         [HttpPost]
@@ -52,6 +57,19 @@ namespace EstadoDeCuenta.API.Controllers
             };
 
             var result = await _getByIdHandler.HandleAsync(query);
+            return Ok(result);
+        }
+
+        [HttpGet("{clientId}/cards")]
+        public async Task<ActionResult<IEnumerable<CardResponseDto>>> GetCards(int clientId)
+        {
+            var query = new GetCardsByClientIdQuery
+            {
+                ClientId = clientId
+            };
+
+            var result = await _getCardsHandler.HandleAsync(query);
+
             return Ok(result);
         }
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstadoDeCuenta.Services.CQRS.Queries.GetMovements
+namespace EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovementById
 {
     public class GetMovementByIdQuery
     {

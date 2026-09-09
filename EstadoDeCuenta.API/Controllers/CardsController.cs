@@ -2,9 +2,13 @@
 using EstadoDeCuenta.Domain.Entities;
 using EstadoDeCuenta.DTOs.Cards;
 using EstadoDeCuenta.DTOs.Clients;
+using EstadoDeCuenta.DTOs.Movements;
 using EstadoDeCuenta.Services.CQRS;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateCard;
-using EstadoDeCuenta.Services.CQRS.Queries.GetCards;
+using EstadoDeCuenta.Services.CQRS.Queries.Cards.GetCardById;
+using EstadoDeCuenta.Services.CQRS.Queries.Cards.GetCards;
+using EstadoDeCuenta.Services.CQRS.Queries.Cards.GetMovementsByCardId;
+using EstadoDeCuenta.Services.CQRS.Queries.Clients.GetCardsByClientId;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstadoDeCuenta.API.Controllers
@@ -17,18 +21,22 @@ namespace EstadoDeCuenta.API.Controllers
         private readonly ICommandHandler<CreateCardCommand, CardResponseDto> _handler;
         private readonly IQueryHandler<GetCardsQuery, IEnumerable<CardResponseDto>> _getHandler;
         private readonly IQueryHandler<GetCardByIdQuery, CardResponseDto> _getByIdHandler;
+        private readonly IQueryHandler<GetMovementsByCardIdQuery, IEnumerable<MovementResponseDto>> _getMovementHandler;
+
 
 
         public CardsController(
             IMapper mapper,
             ICommandHandler<CreateCardCommand, CardResponseDto> handler,
             IQueryHandler<GetCardsQuery, IEnumerable<CardResponseDto>> getHandler,
-            IQueryHandler<GetCardByIdQuery, CardResponseDto> getByIdHandler)
+            IQueryHandler<GetCardByIdQuery, CardResponseDto> getByIdHandler,
+            IQueryHandler<GetMovementsByCardIdQuery, IEnumerable<MovementResponseDto>> getMovementHandler)
         {
             _mapper = mapper;
             _handler = handler;
             _getHandler = getHandler;
             _getByIdHandler = getByIdHandler;
+            _getMovementHandler = getMovementHandler;
 
         }
 
@@ -60,6 +68,19 @@ namespace EstadoDeCuenta.API.Controllers
             };
 
             var result = await _getByIdHandler.HandleAsync(query);
+            return Ok(result);
+        }
+
+        [HttpGet("{cardId}/movements")]
+        public async Task<ActionResult<IEnumerable<MovementResponseDto>>> GetMovements(int cardId)
+        {
+            var query = new GetMovementsByCardIdQuery
+            {
+                CardId = cardId
+            };
+
+            var result = await _getMovementHandler.HandleAsync(query);
+
             return Ok(result);
         }
     }

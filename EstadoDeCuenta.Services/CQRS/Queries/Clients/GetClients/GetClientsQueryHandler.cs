@@ -4,7 +4,7 @@ using EstadoDeCuenta.DTOs.Clients;
 
 
 
-namespace EstadoDeCuenta.Services.CQRS.Queries.GetClients
+namespace EstadoDeCuenta.Services.CQRS.Queries.Clients.GetClients
 {
     public class GetClientsQueryHandler : IQueryHandler<GetClientsQuery, IEnumerable<ClientResponseDto>>
     {

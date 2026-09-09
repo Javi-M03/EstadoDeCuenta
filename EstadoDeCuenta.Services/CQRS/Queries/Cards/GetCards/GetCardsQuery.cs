@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstadoDeCuenta.Services.CQRS.Queries.GetClients
+namespace EstadoDeCuenta.Services.CQRS.Queries.Cards.GetCards
 {
-    public class GetClientsQuery
+    public class GetCardsQuery
     {
     }
 }

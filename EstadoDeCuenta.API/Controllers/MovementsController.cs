@@ -2,7 +2,8 @@
 using EstadoDeCuenta.DTOs.Movements;
 using EstadoDeCuenta.Services.CQRS;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateMovement;
-using EstadoDeCuenta.Services.CQRS.Queries.GetMovements;
+using EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovementById;
+using EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovements;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstadoDeCuenta.API.Controllers

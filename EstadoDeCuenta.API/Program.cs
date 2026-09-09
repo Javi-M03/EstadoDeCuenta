@@ -9,9 +9,14 @@ using EstadoDeCuenta.Services.CQRS;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateCard;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateClient;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateMovement;
-using EstadoDeCuenta.Services.CQRS.Queries.GetCards;
-using EstadoDeCuenta.Services.CQRS.Queries.GetClients;
-using EstadoDeCuenta.Services.CQRS.Queries.GetMovements;
+using EstadoDeCuenta.Services.CQRS.Queries.Cards.GetCardById;
+using EstadoDeCuenta.Services.CQRS.Queries.Cards.GetCards;
+using EstadoDeCuenta.Services.CQRS.Queries.Cards.GetMovementsByCardId;
+using EstadoDeCuenta.Services.CQRS.Queries.Clients.GetCardsByClientId;
+using EstadoDeCuenta.Services.CQRS.Queries.Clients.GetClientById;
+using EstadoDeCuenta.Services.CQRS.Queries.Clients.GetClients;
+using EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovementById;
+using EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovements;
 using EstadoDeCuenta.Services.Mapping;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +49,8 @@ builder.Services.AddScoped<IQueryHandler<GetMovementsQuery, IEnumerable<Movement
 builder.Services.AddScoped<IQueryHandler<GetClientByIdQuery, ClientResponseDto>,GetClientByIdQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetCardByIdQuery, CardResponseDto>,GetCardByIdQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetMovementByIdQuery, MovementResponseDto>,GetMovementByIdQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetCardsByClientIdQuery,IEnumerable<CardResponseDto>>, GetCardsByClientIdQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetMovementsByCardIdQuery,IEnumerable<MovementResponseDto>>, GetMovementsByCardIdQueryHandler>();
 
 var app = builder.Build();
 

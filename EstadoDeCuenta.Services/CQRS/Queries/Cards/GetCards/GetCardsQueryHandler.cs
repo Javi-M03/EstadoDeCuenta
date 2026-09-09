@@ -3,7 +3,7 @@ using EstadoDeCuenta.Domain.Interfaces;
 using EstadoDeCuenta.DTOs.Cards;
 
 
-namespace EstadoDeCuenta.Services.CQRS.Queries.GetCards
+namespace EstadoDeCuenta.Services.CQRS.Queries.Cards.GetCards
 {
     public class GetCardsQueryHandler : IQueryHandler<GetCardsQuery, IEnumerable<CardResponseDto>>
     {

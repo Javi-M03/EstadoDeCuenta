@@ -3,7 +3,7 @@ using EstadoDeCuenta.Domain.Interfaces;
 using EstadoDeCuenta.DTOs.Movements;
 
 
-namespace EstadoDeCuenta.Services.CQRS.Queries.GetMovements
+namespace EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovements
 {
     public class GetMovementsQueryHandler : IQueryHandler<GetMovementsQuery, IEnumerable<MovementResponseDto>>
     {
