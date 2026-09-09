@@ -39,5 +39,10 @@ namespace EstadoDeCuenta.Infrastructure.Repositories
 
             return card;
         }
+
+        public async Task<IEnumerable<Card>> GetAllAsync()
+        {
+            return await _context.Cards.ToListAsync();
+        }
     }
 }

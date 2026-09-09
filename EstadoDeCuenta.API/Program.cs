@@ -9,7 +9,9 @@ using EstadoDeCuenta.Services.CQRS;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateCard;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateClient;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateMovement;
-using EstadoDeCuenta.Services.CQRS.Queries;
+using EstadoDeCuenta.Services.CQRS.Queries.GetCards;
+using EstadoDeCuenta.Services.CQRS.Queries.GetClients;
+using EstadoDeCuenta.Services.CQRS.Queries.GetMovements;
 using EstadoDeCuenta.Services.Mapping;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +39,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateMovementCommandValida
 builder.Services.AddScoped<ICommandHandler<CreateClientCommand, ClientResponseDto>, CreateClientCommandHandler>();
 builder.Services.AddScoped<ICommandHandler<CreateCardCommand, CardResponseDto>, CreateCardCommandHandler>();
 builder.Services.AddScoped<IQueryHandler<GetClientsQuery, IEnumerable<ClientResponseDto>>, GetClientsQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetCardsQuery, IEnumerable<CardResponseDto>>, GetCardsQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetMovementsQuery, IEnumerable<MovementResponseDto>>, GetMovementsQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetClientByIdQuery, ClientResponseDto>,GetClientByIdQueryHandler>();
 
 var app = builder.Build();
 

@@ -48,5 +48,9 @@ namespace EstadoDeCuenta.Infrastructure.Repositories
             
             return movement;
         }
+        public async Task<IEnumerable<Movement>> GetAllAsync()
+        {
+            return await _context.Movements.ToListAsync();
+        }
     }
 }

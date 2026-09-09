@@ -1,28 +1,33 @@
 ﻿using AutoMapper;
 using EstadoDeCuenta.Domain.Entities;
 using EstadoDeCuenta.DTOs.Cards;
+using EstadoDeCuenta.DTOs.Clients;
 using EstadoDeCuenta.Services.CQRS;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateCard;
+using EstadoDeCuenta.Services.CQRS.Queries.GetCards;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstadoDeCuenta.API.Controllers
 {
     [ApiController]
-    [Route("api/clients/{clientId}/cards")]
+    [Route("api/cards")]
     public class CardsController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly ICommandHandler<CreateCardCommand, CardResponseDto> _handler;
+        private readonly IQueryHandler<GetCardsQuery, IEnumerable<CardResponseDto>> _getHandler;
 
         public CardsController(
             IMapper mapper,
-            ICommandHandler<CreateCardCommand, CardResponseDto> handler)
+            ICommandHandler<CreateCardCommand, CardResponseDto> handler,
+            IQueryHandler<GetCardsQuery, IEnumerable<CardResponseDto>> getHandler)
         {
             _mapper = mapper;
             _handler = handler;
+            _getHandler = getHandler;
         }
 
-        [HttpPost]
+        [HttpPost("/api/clients/{clientId}/cards")]
         public async Task<ActionResult<CardResponseDto>> Create(int clientId,
             CardCreateRequestDto dto)
         {
@@ -30,6 +35,14 @@ namespace EstadoDeCuenta.API.Controllers
             command.ClientId = clientId;
 
             var result = await _handler.HandleAsync(command);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CardResponseDto>>> GetAll()
+        {
+            var query = new GetCardsQuery();
+            var result = await _getHandler.HandleAsync(query);
             return Ok(result);
         }
     }
