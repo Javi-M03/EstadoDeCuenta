@@ -14,14 +14,19 @@ namespace EstadoDeCuenta.API.Controllers
         private readonly IMapper _mapper;
         private readonly ICommandHandler<CreateMovementCommand, MovementResponseDto> _handler;
         private readonly IQueryHandler<GetMovementsQuery, IEnumerable<MovementResponseDto>> _getHandler;
+        private readonly IQueryHandler<GetMovementByIdQuery, MovementResponseDto> _getByIdHandler;
+
 
         public MovementsController(IMapper mapper,
             ICommandHandler<CreateMovementCommand,MovementResponseDto> handler,
-            IQueryHandler<GetMovementsQuery, IEnumerable<MovementResponseDto>> getHandler)
+            IQueryHandler<GetMovementsQuery, IEnumerable<MovementResponseDto>> getHandler,
+            IQueryHandler<GetMovementByIdQuery, MovementResponseDto> getByIdHandler
+            )
         {
             _mapper = mapper;
             _handler = handler;
             _getHandler = getHandler;
+            _getByIdHandler = getByIdHandler;
         }
 
         [HttpPost("/api/cards/{cardId}/movements")]
@@ -39,6 +44,18 @@ namespace EstadoDeCuenta.API.Controllers
         {
             var query = new GetMovementsQuery();
             var result = await _getHandler.HandleAsync(query);
+            return Ok(result);
+        }
+
+        [HttpGet("{movementId}")]
+        public async Task<ActionResult<MovementResponseDto>> GetById(int movementId)
+        {
+            var query = new GetMovementByIdQuery
+            {
+                MovementId = movementId
+            };
+
+            var result = await _getByIdHandler.HandleAsync(query);
             return Ok(result);
         }
     }

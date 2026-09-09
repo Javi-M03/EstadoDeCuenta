@@ -42,6 +42,8 @@ builder.Services.AddScoped<IQueryHandler<GetClientsQuery, IEnumerable<ClientResp
 builder.Services.AddScoped<IQueryHandler<GetCardsQuery, IEnumerable<CardResponseDto>>, GetCardsQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetMovementsQuery, IEnumerable<MovementResponseDto>>, GetMovementsQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetClientByIdQuery, ClientResponseDto>,GetClientByIdQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetCardByIdQuery, CardResponseDto>,GetCardByIdQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetMovementByIdQuery, MovementResponseDto>,GetMovementByIdQueryHandler>();
 
 var app = builder.Build();
 

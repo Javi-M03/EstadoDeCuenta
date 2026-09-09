@@ -44,8 +44,7 @@ namespace EstadoDeCuenta.API.Controllers
             return Ok(result);
         }
         [HttpGet("{clientId}")]
-        public async Task<ActionResult<ClientResponseDto>> GetById(
-        int clientId)
+        public async Task<ActionResult<ClientResponseDto>> GetById(int clientId)
         {
             var query = new GetClientByIdQuery
             {
