@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace EstadoDeCuenta.Services.CQRS
 {
-    public interface IQueryHandler
+    public interface IQueryHandler<TQuery, TResult>
     {
+        Task<TResult> HandleAsync(TQuery query);
     }
 }

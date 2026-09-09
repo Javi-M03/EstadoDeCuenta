@@ -11,5 +11,6 @@ namespace EstadoDeCuenta.Domain.Interfaces
     {
         Task<Client?> GetByIdAsync(int id);
         Task<Client> AddAsync(Client client);
+        Task<IEnumerable<Client>> GetAllAsync();
     }
 }

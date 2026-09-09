@@ -9,6 +9,7 @@ using EstadoDeCuenta.Services.CQRS;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateCard;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateClient;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateMovement;
+using EstadoDeCuenta.Services.CQRS.Queries;
 using EstadoDeCuenta.Services.Mapping;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,7 @@ builder.Services.AddScoped<ICommandHandler<CreateMovementCommand, MovementRespon
 builder.Services.AddValidatorsFromAssemblyContaining<CreateMovementCommandValidator>();
 builder.Services.AddScoped<ICommandHandler<CreateClientCommand, ClientResponseDto>, CreateClientCommandHandler>();
 builder.Services.AddScoped<ICommandHandler<CreateCardCommand, CardResponseDto>, CreateCardCommandHandler>();
+builder.Services.AddScoped<IQueryHandler<GetClientsQuery, IEnumerable<ClientResponseDto>>, GetClientsQueryHandler>();
 
 var app = builder.Build();
 

@@ -29,5 +29,9 @@ namespace EstadoDeCuenta.Infrastructure.Repositories
             await _context.Clients.AddAsync(client);
             return client;
         }
+        public async Task<IEnumerable<Client>> GetAllAsync()
+        {
+            return await _context.Clients.ToListAsync();
+        }
     }
 }
