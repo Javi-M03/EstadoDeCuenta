@@ -12,6 +12,7 @@ namespace EstadoDeCuenta.Domain.Interfaces
         Task<Card?> GetByIdAsync(int id);
         Task<Card?> GetByIdWithClientAsync(int id);
         Task<IEnumerable<Card>> GetByClientIdAsync(int clientId);
+        Task<Card> AddAsync(Card card);
 
 
     }

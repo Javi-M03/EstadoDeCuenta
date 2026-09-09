@@ -33,5 +33,11 @@ namespace EstadoDeCuenta.Infrastructure.Repositories
         {
             return await _context.Cards.Where(c => c.ClientId == clientId).ToListAsync();
         }
+        public async Task<Card> AddAsync(Card card)
+        {
+            await _context.Cards.AddAsync(card);
+
+            return card;
+        }
     }
 }

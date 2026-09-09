@@ -1,10 +1,12 @@
 using EstadoDeCuenta.Domain.Interfaces;
+using EstadoDeCuenta.DTOs.Cards;
 using EstadoDeCuenta.DTOs.Clients;
 using EstadoDeCuenta.DTOs.Movements;
 using EstadoDeCuenta.Infrastructure.Data;
 using EstadoDeCuenta.Infrastructure.Repositories;
 using EstadoDeCuenta.Infrastructure.UnitOfWork;
 using EstadoDeCuenta.Services.CQRS;
+using EstadoDeCuenta.Services.CQRS.Commands.CreateCard;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateClient;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateMovement;
 using EstadoDeCuenta.Services.Mapping;
@@ -32,6 +34,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICommandHandler<CreateMovementCommand, MovementResponseDto>, CreateMovementCommandHandler>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateMovementCommandValidator>();
 builder.Services.AddScoped<ICommandHandler<CreateClientCommand, ClientResponseDto>, CreateClientCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<CreateCardCommand, CardResponseDto>, CreateCardCommandHandler>();
 
 var app = builder.Build();
 

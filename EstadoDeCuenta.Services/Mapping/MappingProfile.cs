@@ -3,6 +3,7 @@ using EstadoDeCuenta.Domain.Entities;
 using EstadoDeCuenta.DTOs.Cards;
 using EstadoDeCuenta.DTOs.Clients;
 using EstadoDeCuenta.DTOs.Movements;
+using EstadoDeCuenta.Services.CQRS.Commands.CreateCard;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateClient;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateMovement;
 using System;
@@ -27,12 +28,13 @@ namespace EstadoDeCuenta.Services.Mapping
                opt => opt.MapFrom(src => src.MovementType.ToString()));
 
             CreateMap<CreateMovementRequestDto, CreateMovementCommand>(); 
-
             CreateMap<CreateMovementCommand, Movement>();
             
             CreateMap<CreateClientCommand, Client>();
-
             CreateMap<ClientCreateRequestDto, CreateClientCommand>();
+
+            CreateMap<CardCreateRequestDto, CreateCardCommand>();
+            CreateMap<CreateCardCommand, Card>();
         }
     }
 }

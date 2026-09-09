@@ -18,7 +18,7 @@ namespace EstadoDeCuenta.API.Controllers
             _mapper = mapper;
             _handler = handler;
         }
-
+        
         [HttpPost]
         public async Task<ActionResult<ClientResponseDto>> Create(ClientCreateRequestDto dto)
         {
