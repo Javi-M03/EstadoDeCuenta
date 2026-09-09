@@ -1,13 +1,15 @@
 using EstadoDeCuenta.Domain.Interfaces;
+using EstadoDeCuenta.DTOs.Clients;
 using EstadoDeCuenta.DTOs.Movements;
 using EstadoDeCuenta.Infrastructure.Data;
 using EstadoDeCuenta.Infrastructure.Repositories;
 using EstadoDeCuenta.Infrastructure.UnitOfWork;
 using EstadoDeCuenta.Services.CQRS;
+using EstadoDeCuenta.Services.CQRS.Commands.CreateClient;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateMovement;
 using EstadoDeCuenta.Services.Mapping;
-using Microsoft.EntityFrameworkCore;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -27,8 +29,9 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IMovementRepository, MovementRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<ICommandHandler<CreateMovementCommand, MovementResponseDto>,CreateMovementCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<CreateMovementCommand, MovementResponseDto>, CreateMovementCommandHandler>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateMovementCommandValidator>();
+builder.Services.AddScoped<ICommandHandler<CreateClientCommand, ClientResponseDto>, CreateClientCommandHandler>();
 
 var app = builder.Build();
 

@@ -23,5 +23,11 @@ namespace EstadoDeCuenta.Infrastructure.Repositories
         {
             return await _context.Clients.FirstOrDefaultAsync(c => c.ClientId == id);
         }
+
+        public async Task<Client> AddAsync(Client client)
+        {
+            await _context.Clients.AddAsync(client);
+            return client;
+        }
     }
 }
