@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using EstadoDeCuenta.Domain.Interfaces;
 using EstadoDeCuenta.DTOs.Statemets;
+using EstadoDeCuenta.Services.Configuration;
 using EstadoDeCuenta.Services.Services;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,15 +17,18 @@ namespace EstadoDeCuenta.Services.CQRS.Queries.GetCardStatements
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly AccountStatementCalculator _calculator;
+        private readonly AccountStatementSettings _settings;
 
         public GetCardStatementQueryHandler(
             IUnitOfWork unitOfWork,
             IMapper mapper,
-            AccountStatementCalculator calculator)
+            AccountStatementCalculator calculator,
+            IOptions<AccountStatementSettings> settings)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _calculator = calculator;
+            _settings = settings.Value;
         }
         public async Task<AccountStatementDto> HandleAsync(
         GetCardStatementQuery query)
@@ -38,13 +43,12 @@ namespace EstadoDeCuenta.Services.CQRS.Queries.GetCardStatements
 
             var movements = await _unitOfWork.Movements.GetByCardIdAsync(query.CardId);
             //valores quemados temporales
-            const decimal interestPercentage = 25m;
-            const decimal minimumPaymentPercentage = 5m;
+;
             var statement = _calculator.Calculate(
                 card,
                 movements,
-                interestPercentage,
-                minimumPaymentPercentage);
+                _settings.InterestPercentage,
+                _settings.MinimunPaymentPercentage);
 
             statement.Movements =
                 _mapper.Map<IEnumerable<DTOs.Movements.MovementResponseDto>>(movements);
