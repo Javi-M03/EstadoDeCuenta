@@ -15,6 +15,7 @@ namespace EstadoDeCuenta.Infrastructure.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<Card> Cards { get; set; }
         public DbSet<Movement> Movements { get; set; }
+        public DbSet<AccountStatementSetting> AccountStatementSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

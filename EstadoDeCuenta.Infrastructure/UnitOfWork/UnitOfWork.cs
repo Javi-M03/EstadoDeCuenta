@@ -15,17 +15,20 @@ namespace EstadoDeCuenta.Infrastructure.UnitOfWork
         public IClientRepository Clients { get; }
         public ICardRepository Cards { get; }
         public IMovementRepository Movements { get; }
+        public ISettingsRepository Settings { get; }
 
         public UnitOfWork(
             AppDBContext context,
             IClientRepository clients,
             ICardRepository cards,
-            IMovementRepository movements)
+            IMovementRepository movements,
+            ISettingsRepository settings)
         {
             _context = context;
             Clients = clients;
             Cards = cards;
             Movements = movements;
+            Settings = settings;
         }
 
         public Task<int> SaveChangesAsync()

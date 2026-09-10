@@ -18,7 +18,7 @@ namespace EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovements
 
         public async Task<IEnumerable<MovementResponseDto>> HandleAsync(GetMovementsQuery query)
         {
-            var movements = await _unitOfWork.Movements.GetAllAsync();
+            var movements = await _unitOfWork.Movements.GetAllFilteredAsync(query.FromDate, query.ToDate);
 
             return _mapper.Map<IEnumerable<MovementResponseDto>>(movements);
         }

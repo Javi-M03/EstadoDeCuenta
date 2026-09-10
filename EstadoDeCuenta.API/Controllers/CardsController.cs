@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EstadoDeCuenta.Domain.Entities;
+using EstadoDeCuenta.Domain.Enums;
 using EstadoDeCuenta.DTOs.Cards;
 using EstadoDeCuenta.DTOs.Clients;
 using EstadoDeCuenta.DTOs.Movements;
@@ -77,11 +78,18 @@ namespace EstadoDeCuenta.API.Controllers
         }
 
         [HttpGet("{cardId}/movements")]
-        public async Task<ActionResult<IEnumerable<MovementResponseDto>>> GetMovements(int cardId)
+        public async Task<ActionResult<IEnumerable<MovementResponseDto>>> GetMovements(
+            int cardId,
+            [FromQuery] DateTime? fromDate = null,
+            [FromQuery] DateTime? toDate = null,
+            [FromQuery] MovementTypeEnum? movementType = null)
         {
             var query = new GetMovementsByCardIdQuery
             {
-                CardId = cardId
+                CardId = cardId,
+                FromDate = fromDate,
+                ToDate = toDate,
+                MovementType = movementType
             };
 
             var result = await _getMovementHandler.HandleAsync(query);

@@ -1,0 +1,13 @@
+@page "{movementId:int}"
+@model CardsFrontend.Pages.Movements.DetailsModel
+@{
+    ViewData["Title"] = "Movement Details";
+}
+<h1>Movement @Model.Movement?.MovementId</h1>
+<table class="table table-bordered w-auto">
+    <tr><th>Fecha</th><td>@Model.Movement?.MovementDate</td></tr>
+    <tr><th>Monto</th><td>@Model.Movement?.MovementAmount</td></tr>
+    <tr><th>Descripcion</th><td>@Model.Movement?.MovementDescription</td></tr>
+    <tr><th>Tipo de Movimiento</th><td>@Model.Movement?.MovementType</td></tr>
+</table>
+<a class="btn btn-secondary" asp-page="Index"><i class="bi bi-arrow-left"></i> Regresar</a>

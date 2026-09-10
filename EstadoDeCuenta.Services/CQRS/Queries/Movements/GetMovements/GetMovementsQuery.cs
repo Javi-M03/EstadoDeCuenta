@@ -8,5 +8,7 @@ namespace EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovements
 {
     public class GetMovementsQuery
     {
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
     }
 }

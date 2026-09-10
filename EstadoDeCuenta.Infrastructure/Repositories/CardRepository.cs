@@ -31,7 +31,12 @@ namespace EstadoDeCuenta.Infrastructure.Repositories
 
         public async Task<IEnumerable<Card>> GetByClientIdAsync(int clientId)
         {
-            return await _context.Cards.Where(c => c.ClientId == clientId).ToListAsync();
+            // Uses the stored procedure usp_GetCardsByClient (see Database scripts /
+            // AddStoredProcedures migration).
+            return await _context.Cards
+                .FromSqlRaw("EXEC dbo.usp_GetCardsByClient @ClientId = {0}", clientId)
+                .AsNoTracking()
+                .ToListAsync();
         }
         public async Task<Card> AddAsync(Card card)
         {

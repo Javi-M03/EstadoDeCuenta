@@ -3,9 +3,11 @@ using EstadoDeCuenta.Domain.Entities;
 using EstadoDeCuenta.DTOs.Cards;
 using EstadoDeCuenta.DTOs.Clients;
 using EstadoDeCuenta.DTOs.Movements;
+using EstadoDeCuenta.DTOs.Settings;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateCard;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateClient;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateMovement;
+using EstadoDeCuenta.Services.CQRS.Commands.Settings.UpdateAccountStatementSettings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +37,9 @@ namespace EstadoDeCuenta.Services.Mapping
 
             CreateMap<CardCreateRequestDto, CreateCardCommand>();
             CreateMap<CreateCardCommand, Card>();
+
+            CreateMap<AccountStatementSetting, AccountStatementSettingsDto>();
+            CreateMap<UpdateAccountStatementSettingsRequestDto, UpdateAccountStatementSettingsCommand>();
         }
     }
 }

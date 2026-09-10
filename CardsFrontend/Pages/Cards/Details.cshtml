@@ -1,0 +1,63 @@
+@page "{cardId:int}"
+@model CardsFrontend.Pages.Cards.DetailsModel
+@{
+    ViewData["Title"] = "Card Details";
+}
+<h1>Tarjeta @Model.Card?.CardNumber</h1>
+<p class="text-muted">Limite: @Model.Card?.CardLimit | Cliente: @(Model.Client?.ClientName ?? $"Client {Model.Card?.ClientId}")</p>
+
+@if (Model.Statement is not null)
+{
+    <div class="d-flex align-items-center gap-2 mb-2">
+        <h3 class="mb-0">Estado de Cuenta</h3>
+        <a class="btn btn-outline-danger btn-sm"
+           asp-page-handler="ExportPdf" asp-route-cardId="@Model.Card?.CardId">
+            <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
+        </a>
+        <a class="btn btn-outline-success btn-sm"
+           asp-page-handler="ExportExcel" asp-route-cardId="@Model.Card?.CardId">
+            <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+        </a>
+    </div>
+    <table class="table table-bordered w-auto">
+        <tr><th>Saldo Acumulado</th><td>@Model.Statement.CurrentBalance</td></tr>
+        <tr><th>Saldo Disponible</th><td>@Model.Statement.AvailableBalance</td></tr>
+        <tr><th>Saldo de compras mensual</th><td>@Model.Statement.CurrentMonthPurchases</td></tr>
+        <tr><th>Saldo de compras mes anterior</th><td>@Model.Statement.PreviousMonthPurchases</td></tr>
+        <tr><th>Interes bonificable</th><td>@Model.Statement.BonusInterest</td></tr>
+        <tr><th>Pago minimo</th><td>@Model.Statement.MinimumPayment</td></tr>
+        <tr><th>Pago de contado</th><td>@Model.Statement.TotalPayment</td></tr>
+        <tr><th>Pago más intereses</th><td>@Model.Statement.TotalPaymentWithInterest</td></tr>
+    </table>
+}
+
+<h3>Movimientos</h3>
+<p>
+    <a class="btn btn-success" asp-page="AddMovement" asp-route-cardId="@Model.Card?.CardId">
+        <i class="bi bi-plus-lg"></i> Nuevo Movimiento
+    </a>
+    <a class="btn btn-outline-primary" asp-page="History" asp-route-cardId="@Model.Card?.CardId">
+        <i class="bi bi-clock-history"></i> Historial de Transacciones
+    </a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Monto</th>
+            <th>Descripcion</th>
+            <th>Tipo de pago</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var m in Model.Movements)
+    {
+        <tr>
+            <td>@m.MovementDate.ToString("yyyy-MM-dd HH:mm")</td>
+            <td>@m.MovementAmount</td>
+            <td>@m.MovementDescription</td>
+            <td>@m.MovementType</td>
+        </tr>
+    }
+    </tbody>
+</table>

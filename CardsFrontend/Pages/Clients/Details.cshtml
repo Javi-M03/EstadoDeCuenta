@@ -1,0 +1,33 @@
+@page "{clientId:int}"
+@model CardsFrontend.Pages.Clients.DetailsModel
+@{
+    ViewData["Title"] = "Client Details";
+}
+<h1>@Model.Client?.ClientName</h1>
+<p class="text-muted">Client Id: @Model.Client?.ClientId</p>
+
+<h3>Tarjetas</h3>
+<p><a class="btn btn-success" asp-page="/Cards/Create" asp-route-clientId="@Model.Client?.ClientId"><i class="bi bi-plus-lg"></i> Nueva Tarjeta</a></p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Tarjeta</th>
+            <th>Numero de tarjeta</th>
+            <th>Limite</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var card in Model.Cards)
+    {
+        <tr>
+            <td>@card.CardId</td>
+            <td>@card.CardNumber</td>
+            <td>@card.CardLimit</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" asp-page="/Cards/Details" asp-route-cardId="@card.CardId"><i class="bi bi-eye"></i> Detalles</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

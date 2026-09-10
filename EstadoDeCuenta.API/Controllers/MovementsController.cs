@@ -41,9 +41,15 @@ namespace EstadoDeCuenta.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MovementResponseDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<MovementResponseDto>>> GetAll(
+            [FromQuery] DateTime? fromDate = null,
+            [FromQuery] DateTime? toDate = null)
         {
-            var query = new GetMovementsQuery();
+            var query = new GetMovementsQuery
+            {
+                FromDate = fromDate,
+                ToDate = toDate
+            };
             var result = await _getHandler.HandleAsync(query);
             return Ok(result);
         }

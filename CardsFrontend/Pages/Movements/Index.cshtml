@@ -1,0 +1,53 @@
+@page
+@model CardsFrontend.Pages.Movements.IndexModel
+@{
+    ViewData["Title"] = "Movements";
+}
+<h1>Movimientos</h1>
+
+<form method="get" class="row g-3 align-items-end mb-4">
+    <div class="col-auto">
+        <label class="form-label" asp-for="Period">Periodo</label>
+        <select class="form-select" asp-for="Period" asp-items="Model.PeriodOptions"></select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-funnel"></i> Aplicar filtro</button>
+    </div>
+</form>
+
+<p class="text-muted">@Model.Movements.Count movimiento(s) encontrado(s).</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Fecha</th>
+            <th>Monto</th>
+            <th>Descripcion</th>
+            <th>Tipo de Movimiento</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @if (Model.Movements.Count == 0)
+    {
+        <tr><td colspan="6" class="text-center text-muted">No movements for the selected period.</td></tr>
+    }
+    else
+    {
+        @foreach (var m in Model.Movements)
+        {
+            <tr>
+                <td>@m.MovementId</td>
+                <td>@m.MovementDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@m.MovementAmount</td>
+                <td>@m.MovementDescription</td>
+                <td>@m.MovementType</td>
+                <td>
+                    <a class="btn btn-sm btn-outline-primary" asp-page="Details" asp-route-movementId="@m.MovementId"><i class="bi bi-eye"></i> Detalles</a>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>

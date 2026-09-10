@@ -42,13 +42,19 @@ namespace EstadoDeCuenta.Services.CQRS.Queries.GetCardStatements
             }
 
             var movements = await _unitOfWork.Movements.GetByCardIdAsync(query.CardId);
-            //valores quemados temporales
-;
+
+            var dbSettings = await _unitOfWork.Settings.GetAccountStatementSettingsAsync();
+
+            var interestPercentage =
+                dbSettings?.InterestPercentage ?? _settings.InterestPercentage;
+            var minimumPaymentPercentage =
+                dbSettings?.MinimumPaymentPercentage ?? _settings.MinimunPaymentPercentage;
+
             var statement = _calculator.Calculate(
                 card,
                 movements,
-                _settings.InterestPercentage,
-                _settings.MinimunPaymentPercentage);
+                interestPercentage,
+                minimumPaymentPercentage);
 
             statement.Movements =
                 _mapper.Map<IEnumerable<DTOs.Movements.MovementResponseDto>>(movements);

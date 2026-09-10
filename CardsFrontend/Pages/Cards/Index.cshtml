@@ -1,0 +1,31 @@
+@page
+@model CardsFrontend.Pages.Cards.IndexModel
+@{
+    ViewData["Title"] = "Cards";
+}
+<h1>Tarjetas</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Tarjeta</th>
+            <th>Numero de Tarjeta</th>
+            <th>Limite</th>
+            <th>Cliente</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var card in Model.Cards)
+    {
+        <tr>
+            <td>@card.CardId</td>
+            <td>@card.CardNumber</td>
+            <td>@card.CardLimit</td>
+            <td>@Model.OwnerName(card.ClientId)</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" asp-page="Details" asp-route-cardId="@card.CardId"><i class="bi bi-eye"></i> Detalles</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

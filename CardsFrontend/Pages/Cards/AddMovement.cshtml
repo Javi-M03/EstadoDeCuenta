@@ -1,0 +1,28 @@
+@page "{cardId:int}"
+@model CardsFrontend.Pages.Cards.AddMovementModel
+@{
+    ViewData["Title"] = "New Movement";
+}
+<h1>Nuevo Movimiento para la Tarjeta @(Model.Card?.CardNumber ?? Model.CardId.ToString())</h1>
+<div asp-validation-summary="All" class="alert alert-danger" role="alert" style="@(Model.ModelState.ErrorCount == 0 ? "display:none" : "")"></div>
+<form method="post">
+    <input type="hidden" asp-for="CardId" />
+    <div class="mb-3">
+        <label class="form-label" asp-for="Movement.MovementDate">Fecha del movimiento</label>
+        <input class="form-control" asp-for="Movement.MovementDate" type="datetime-local" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Movement.MovementAmount">Monto</label>
+        <input class="form-control" asp-for="Movement.MovementAmount" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Movement.MovementDescription">Descripcion</label>
+        <input class="form-control" asp-for="Movement.MovementDescription" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Movement.MovementType">Tipo de Movimiento</label>
+        <select class="form-select" asp-for="Movement.MovementType" asp-items="Model.MovementTypeOptions"></select>
+    </div>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Guardar</button>
+    <a class="btn btn-secondary" asp-page="Details" asp-route-cardId="@Model.CardId"><i class="bi bi-x-lg"></i> Cancelar</a>
+</form>
