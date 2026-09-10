@@ -1,3 +1,4 @@
+using EstadoDeCuenta.API.Middleware;
 using EstadoDeCuenta.Domain.Interfaces;
 using EstadoDeCuenta.DTOs.Cards;
 using EstadoDeCuenta.DTOs.Clients;
@@ -6,6 +7,7 @@ using EstadoDeCuenta.DTOs.Statemets;
 using EstadoDeCuenta.Infrastructure.Data;
 using EstadoDeCuenta.Infrastructure.Repositories;
 using EstadoDeCuenta.Infrastructure.UnitOfWork;
+using EstadoDeCuenta.Services.Configuration;
 using EstadoDeCuenta.Services.CQRS;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateCard;
 using EstadoDeCuenta.Services.CQRS.Commands.CreateClient;
@@ -43,6 +45,9 @@ builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IMovementRepository, MovementRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<AccountStatementCalculator>();
+builder.Services.AddHealthChecks().AddDbContextCheck<AppDBContext>();
+builder.Services.Configure<AccountStatementSettings>(builder.Configuration.GetSection("AccountStatementSettings"));
+
 builder.Services.AddScoped<ICommandHandler<CreateMovementCommand, MovementResponseDto>, CreateMovementCommandHandler>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateMovementCommandValidator>();
 builder.Services.AddScoped<ICommandHandler<CreateClientCommand, ClientResponseDto>, CreateClientCommandHandler>();
@@ -59,6 +64,8 @@ builder.Services.AddScoped<IQueryHandler<GetCardStatementQuery, AccountStatement
 
 var app = builder.Build();
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -71,5 +78,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
+
 
 app.Run();
