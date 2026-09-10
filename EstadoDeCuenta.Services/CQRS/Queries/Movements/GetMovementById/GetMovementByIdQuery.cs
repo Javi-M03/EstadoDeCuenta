@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovementById
+{
+    public class GetMovementByIdQuery
+    {
+        public int MovementId { get; set; }
+    }
+}
