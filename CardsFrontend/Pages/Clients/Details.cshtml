@@ -8,6 +8,7 @@
 
 <h3>Tarjetas</h3>
 <p><a class="btn btn-success" asp-page="/Cards/Create" asp-route-clientId="@Model.Client?.ClientId"><i class="bi bi-plus-lg"></i> Nueva Tarjeta</a></p>
+<div class="table-responsive">
 <table class="table table-striped">
     <thead>
         <tr>
@@ -31,3 +32,4 @@
     }
     </tbody>
 </table>
+</div>

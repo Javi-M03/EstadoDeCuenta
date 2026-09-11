@@ -4,18 +4,17 @@
     string ActiveIf(string prefix) => currentPage.StartsWith(prefix.ToLowerInvariant()) ? "active" : "";
 }
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Estado De Cuenta</title>
+    <title>@ViewData["Title"] - EstadoDeCuenta</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
     <style>
         :root {
             --brand-red: #c81e1e;
             --brand-red-dark: #a11616;
-            /* Recolor Bootstrap's link color to the brand red. */
             --bs-link-color: #c81e1e;
             --bs-link-hover-color: #a11616;
         }
@@ -29,14 +28,41 @@
             min-height: 100vh;
         }
 
-        /* ---------- Sidebar ---------- */
+        /* ---------- Barra superior (solo móvil) ---------- */
+        .topbar {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            background: var(--brand-red);
+            color: #fff;
+            padding: .6rem 1rem;
+        }
+
+        .topbar .topbar-toggle {
+            background: transparent;
+            border: 0;
+            color: #fff;
+            font-size: 1.5rem;
+            line-height: 1;
+            padding: 0 .25rem;
+        }
+
+        .topbar .topbar-brand {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        /* ---------- Sidebar / drawer ---------- */
         .sidebar {
             width: 240px;
             flex-shrink: 0;
-            background: var(--brand-red);
+            background: var(--brand-red) !important;
             color: #fff;
-            display: flex;
-            flex-direction: column;
+            --bs-offcanvas-width: 250px;
         }
 
         .sidebar .brand {
@@ -45,7 +71,6 @@
             font-weight: 700;
             color: #fff;
             text-decoration: none;
-            display: flex;
             align-items: center;
             gap: .6rem;
             border-bottom: 1px solid rgba(255, 255, 255, .2);
@@ -76,7 +101,7 @@
             text-align: center;
         }
 
-        /* ---------- Content ---------- */
+        /* ---------- Contenido ---------- */
         .content {
             flex: 1;
             padding: 1.5rem 2rem;
@@ -91,7 +116,7 @@
             padding: 1.5rem 2rem;
         }
 
-        /* ---------- Red / white accents ---------- */
+        /* ---------- Acentos rojo / blanco ---------- */
         .btn-primary {
             --bs-btn-bg: var(--brand-red);
             --bs-btn-border-color: var(--brand-red);
@@ -114,68 +139,77 @@
             color: var(--brand-red-dark);
         }
 
-        /* Responsive: sidebar becomes a top strip on small screens. */
-        @@media (max-width: 768px) {
-            .app-shell {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                flex-direction: row;
-                flex-wrap: wrap;
-                align-items: center;
-            }
-
-            .sidebar .brand {
-                border-bottom: none;
-            }
-
+        @@media (max-width: 767.98px) {
             .content {
+                padding: 1rem;
+            }
+
+            .content-panel {
                 padding: 1rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Barra superior con botón de menú (solo en pantallas pequeñas) -->
+    <nav class="topbar d-md-none">
+        <button class="topbar-toggle" type="button"
+                data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu"
+                aria-controls="sidebarMenu" aria-label="Abrir menú">
+            <i class="bi bi-list"></i>
+        </button>
+        <a class="topbar-brand" asp-page="/Index">
+            <i class="bi bi-credit-card-2-front"></i>
+            <span>EstadoDeCuenta</span>
+        </a>
+    </nav>
+
     <div class="app-shell">
-        <nav class="sidebar">
-            <a class="brand" asp-page="/Index">
-                <i class="bi bi-credit-card-2-front"></i>
-                <span>EstadoDeCuenta</span>
-            </a>
-            <ul class="nav flex-column mt-2">
-                <li class="nav-item">
-                    <a class="nav-link @ActiveIf("/index")" asp-page="/Index">
-                        <i class="bi bi-house-door"></i><span>Inicio</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @ActiveIf("/clients")" asp-page="/Clients/Index">
-                        <i class="bi bi-person"></i><span>Clientes</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @ActiveIf("/cards")" asp-page="/Cards/Index">
-                        <i class="bi bi-credit-card"></i><span>Tarjetas</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @ActiveIf("/movements")" asp-page="/Movements/Index">
-                        <i class="bi bi-arrow-left-right"></i><span>Movimientos</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @ActiveIf("/settings")" asp-page="/Settings/Index">
-                        <i class="bi bi-gear"></i><span>Configuracion</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @ActiveIf("/health")" asp-page="/Health/Index">
-                        <i class="bi bi-heart-pulse"></i><span>Estado</span>
-                    </a>
-                </li>
-            </ul>
+        <!-- Menú lateral: drawer (offcanvas) en móvil, fijo en escritorio -->
+        <nav class="sidebar offcanvas-md offcanvas-start" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarLabel">
+            <div class="offcanvas-header d-md-none">
+                <span class="offcanvas-title fw-bold" id="sidebarLabel">Menú</span>
+                <button type="button" class="btn-close btn-close-white"
+                        data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Cerrar"></button>
+            </div>
+            <div class="offcanvas-body d-flex flex-column p-0">
+                <a class="brand d-none d-md-flex" asp-page="/Index">
+                    <i class="bi bi-credit-card-2-front"></i>
+                    <span>EstadoDeCuenta</span>
+                </a>
+                <ul class="nav flex-column mt-md-2">
+                    <li class="nav-item">
+                        <a class="nav-link @ActiveIf("/index")" asp-page="/Index">
+                            <i class="bi bi-house-door"></i><span>Inicio</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @ActiveIf("/clients")" asp-page="/Clients/Index">
+                            <i class="bi bi-person"></i><span>Clientes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @ActiveIf("/cards")" asp-page="/Cards/Index">
+                            <i class="bi bi-credit-card"></i><span>Tarjetas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @ActiveIf("/movements")" asp-page="/Movements/Index">
+                            <i class="bi bi-arrow-left-right"></i><span>Movimientos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @ActiveIf("/settings")" asp-page="/Settings/Index">
+                            <i class="bi bi-gear"></i><span>Configuraciones</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @ActiveIf("/health")" asp-page="/Health/Index">
+                            <i class="bi bi-heart-pulse"></i><span>Estado</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </nav>
 
         <main role="main" class="content">

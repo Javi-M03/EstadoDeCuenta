@@ -8,7 +8,7 @@
 
 @if (Model.Statement is not null)
 {
-    <div class="d-flex align-items-center gap-2 mb-2">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
         <h3 class="mb-0">Estado de Cuenta</h3>
         <a class="btn btn-outline-danger btn-sm"
            asp-page-handler="ExportPdf" asp-route-cardId="@Model.Card?.CardId">
@@ -19,6 +19,7 @@
             <i class="bi bi-file-earmark-excel"></i> Exportar Excel
         </a>
     </div>
+    <div class="table-responsive">
     <table class="table table-bordered w-auto">
         <tr><th>Saldo Acumulado</th><td>@Model.Statement.CurrentBalance</td></tr>
         <tr><th>Saldo Disponible</th><td>@Model.Statement.AvailableBalance</td></tr>
@@ -29,6 +30,7 @@
         <tr><th>Pago de contado</th><td>@Model.Statement.TotalPayment</td></tr>
         <tr><th>Pago más intereses</th><td>@Model.Statement.TotalPaymentWithInterest</td></tr>
     </table>
+    </div>
 }
 
 <h3>Movimientos</h3>
@@ -40,6 +42,7 @@
         <i class="bi bi-clock-history"></i> Historial de Transacciones
     </a>
 </p>
+<div class="table-responsive">
 <table class="table table-striped">
     <thead>
         <tr>
@@ -61,3 +64,4 @@
     }
     </tbody>
 </table>
+</div>

@@ -12,24 +12,31 @@ public interface IStatementExportService
     byte[] BuildExcel(Statement statement);
 }
 
+/// <summary>
+/// Genera el estado de cuenta de una tarjeta como PDF (QuestPDF)
+/// o como libro de Excel (ClosedXML).
+/// </summary>
 public class StatementExportService : IStatementExportService
 {
     private const string Currency = "#,##0.00";
 
+    // Resumen del estado de cuenta con etiquetas en español (compartido por PDF y Excel).
+    private static (string Label, decimal Value)[] BuildSummary(Statement statement) => new[]
+    {
+        ("Saldo Acumulado", statement.CurrentBalance),
+        ("Límite de la Tarjeta", statement.CardLimit),
+        ("Saldo Disponible", statement.AvailableBalance),
+        ("Compras del Mes Actual", statement.CurrentMonthPurchases),
+        ("Compras del Mes Anterior", statement.PreviousMonthPurchases),
+        ("Interés Bonificable", statement.BonusInterest),
+        ("Pago Mínimo", statement.MinimumPayment),
+        ("Pago de Contado", statement.TotalPayment),
+        ("Pago más Intereses", statement.TotalPaymentWithInterest),
+    };
+
     public byte[] BuildPdf(Statement statement)
     {
-        var summary = new (string Label, decimal Value)[]
-        {
-            ("Current Balance", statement.CurrentBalance),
-            ("Card Limit", statement.CardLimit),
-            ("Available Balance", statement.AvailableBalance),
-            ("Current Month Purchases", statement.CurrentMonthPurchases),
-            ("Previous Month Purchases", statement.PreviousMonthPurchases),
-            ("Bonus Interest", statement.BonusInterest),
-            ("Minimum Payment", statement.MinimumPayment),
-            ("Total Payment", statement.TotalPayment),
-            ("Total Payment With Interest", statement.TotalPaymentWithInterest),
-        };
+        var summary = BuildSummary(statement);
 
         var document = Document.Create(container =>
         {
@@ -41,10 +48,10 @@ public class StatementExportService : IStatementExportService
 
                 page.Header().Column(header =>
                 {
-                    header.Item().Text("Card Statement").FontSize(20).Bold();
-                    header.Item().Text($"Client: {statement.ClientName}");
-                    header.Item().Text($"Card: {statement.CardNumber}");
-                    header.Item().Text($"Generated: {DateTime.Now:yyyy-MM-dd HH:mm}")
+                    header.Item().Text("Estado de Cuenta").FontSize(20).Bold();
+                    header.Item().Text($"Cliente: {statement.ClientName}");
+                    header.Item().Text($"Tarjeta: {statement.CardNumber}");
+                    header.Item().Text($"Generado: {DateTime.Now:yyyy-MM-dd HH:mm}")
                         .FontSize(8).FontColor(Colors.Grey.Medium);
                 });
 
@@ -52,8 +59,8 @@ public class StatementExportService : IStatementExportService
                 {
                     content.Spacing(15);
 
-                    // Summary
-                    content.Item().Text("Summary").FontSize(14).Bold();
+                    // Resumen
+                    content.Item().Text("Resumen").FontSize(14).Bold();
                     content.Item().Table(table =>
                     {
                         table.ColumnsDefinition(cols =>
@@ -71,24 +78,24 @@ public class StatementExportService : IStatementExportService
                         }
                     });
 
-                    // Movements
-                    content.Item().Text("Movements").FontSize(14).Bold();
+                    // Movimientos
+                    content.Item().Text("Movimientos").FontSize(14).Bold();
                     content.Item().Table(table =>
                     {
                         table.ColumnsDefinition(cols =>
                         {
-                            cols.ConstantColumn(110); // Date
-                            cols.ConstantColumn(90);  // Amount
-                            cols.RelativeColumn();     // Description
-                            cols.ConstantColumn(90);  // Type
+                            cols.ConstantColumn(110); // Fecha
+                            cols.ConstantColumn(90);  // Monto
+                            cols.RelativeColumn();     // Descripción
+                            cols.ConstantColumn(90);  // Tipo
                         });
 
                         table.Header(h =>
                         {
-                            h.Cell().Background(Colors.Grey.Lighten3).Padding(5).Text("Date").Bold();
-                            h.Cell().Background(Colors.Grey.Lighten3).Padding(5).AlignRight().Text("Amount").Bold();
-                            h.Cell().Background(Colors.Grey.Lighten3).Padding(5).Text("Description").Bold();
-                            h.Cell().Background(Colors.Grey.Lighten3).Padding(5).Text("Type").Bold();
+                            h.Cell().Background(Colors.Grey.Lighten3).Padding(5).Text("Fecha").Bold();
+                            h.Cell().Background(Colors.Grey.Lighten3).Padding(5).AlignRight().Text("Monto").Bold();
+                            h.Cell().Background(Colors.Grey.Lighten3).Padding(5).Text("Descripción").Bold();
+                            h.Cell().Background(Colors.Grey.Lighten3).Padding(5).Text("Tipo").Bold();
                         });
 
                         foreach (var m in statement.Movements)
@@ -121,30 +128,20 @@ public class StatementExportService : IStatementExportService
     {
         using var workbook = new XLWorkbook();
 
-        var summarySheet = workbook.Worksheets.Add("Summary");
-        summarySheet.Cell(1, 1).Value = "Card Statement";
+        // ---- Hoja Resumen ----
+        var summarySheet = workbook.Worksheets.Add("Resumen");
+        summarySheet.Cell(1, 1).Value = "Estado de Cuenta";
         summarySheet.Cell(1, 1).Style.Font.Bold = true;
         summarySheet.Cell(1, 1).Style.Font.FontSize = 16;
 
-        summarySheet.Cell(2, 1).Value = "Client";
+        summarySheet.Cell(2, 1).Value = "Cliente";
         summarySheet.Cell(2, 2).Value = statement.ClientName;
-        summarySheet.Cell(3, 1).Value = "Card";
+        summarySheet.Cell(3, 1).Value = "Tarjeta";
         summarySheet.Cell(3, 2).Value = statement.CardNumber;
-        summarySheet.Cell(4, 1).Value = "Generated";
+        summarySheet.Cell(4, 1).Value = "Generado";
         summarySheet.Cell(4, 2).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
-        var summary = new (string Label, decimal Value)[]
-        {
-            ("Current Balance", statement.CurrentBalance),
-            ("Card Limit", statement.CardLimit),
-            ("Available Balance", statement.AvailableBalance),
-            ("Current Month Purchases", statement.CurrentMonthPurchases),
-            ("Previous Month Purchases", statement.PreviousMonthPurchases),
-            ("Bonus Interest", statement.BonusInterest),
-            ("Minimum Payment", statement.MinimumPayment),
-            ("Total Payment", statement.TotalPayment),
-            ("Total Payment With Interest", statement.TotalPaymentWithInterest),
-        };
+        var summary = BuildSummary(statement);
 
         var row = 6;
         foreach (var (label, value) in summary)
@@ -159,8 +156,9 @@ public class StatementExportService : IStatementExportService
 
         summarySheet.Columns().AdjustToContents();
 
-        var movementsSheet = workbook.Worksheets.Add("Movements");
-        var headers = new[] { "Date", "Amount", "Description", "Type" };
+        // ---- Hoja Movimientos ----
+        var movementsSheet = workbook.Worksheets.Add("Movimientos");
+        var headers = new[] { "Fecha", "Monto", "Descripción", "Tipo" };
         for (var c = 0; c < headers.Length; c++)
         {
             var cell = movementsSheet.Cell(1, c + 1);
