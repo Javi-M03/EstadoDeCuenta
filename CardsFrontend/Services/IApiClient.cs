@@ -29,4 +29,7 @@ public interface IApiClient
     // Settings
     Task<AccountStatementSettings?> GetAccountStatementSettingsAsync();
     Task<AccountStatementSettings?> UpdateAccountStatementSettingsAsync(AccountStatementSettings settings);
+
+    // Health
+    Task<ApiHealth> GetHealthAsync();
 }

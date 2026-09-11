@@ -1,0 +1,288 @@
+{
+  "info": {
+    "_postman_id": "e3b0c442-1a2b-4c3d-9e5f-abcdef012345",
+    "name": "EstadoDeCuenta API",
+    "description": "Colección de Postman para probar la REST API de EstadoDeCuenta (estado de cuenta de tarjetas de crédito).\n\nCómo usar:\n1. File > Import y selecciona este archivo.\n2. Ajusta la variable `baseUrl` si tu API corre en otro puerto (por defecto https://localhost:7125).\n3. Si Postman se queja del certificado SSL de localhost, ve a Settings y desactiva 'SSL certificate verification' (o usa una baseUrl http).\n4. Las variables `clientId`, `cardId` y `movementId` traen valores de ejemplo (1) para las rutas.\n\nLos endpoints POST/PUT ya traen un cuerpo JSON de ejemplo listo para enviar.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Clients",
+      "item": [
+        {
+          "name": "Get all clients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clients",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clients"]
+            },
+            "description": "Devuelve todos los clientes."
+          },
+          "response": []
+        },
+        {
+          "name": "Get client by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/{{clientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clients", "{{clientId}}"]
+            },
+            "description": "Devuelve un cliente por su Id."
+          },
+          "response": []
+        },
+        {
+          "name": "Get cards by client",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/{{clientId}}/cards",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clients", "{{clientId}}", "cards"]
+            },
+            "description": "Devuelve las tarjetas de un cliente (stored procedure usp_GetCardsByClient)."
+          },
+          "response": []
+        },
+        {
+          "name": "Create client",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientName\": \"Nuevo Cliente\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clients",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clients"]
+            },
+            "description": "Crea un cliente."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cards",
+      "item": [
+        {
+          "name": "Get all cards",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cards",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cards"]
+            },
+            "description": "Devuelve todas las tarjetas."
+          },
+          "response": []
+        },
+        {
+          "name": "Get card by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cards/{{cardId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cards", "{{cardId}}"]
+            },
+            "description": "Devuelve una tarjeta por su Id."
+          },
+          "response": []
+        },
+        {
+          "name": "Get card statement",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cards/{{cardId}}/statement",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cards", "{{cardId}}", "statement"]
+            },
+            "description": "Devuelve el estado de cuenta calculado de la tarjeta (saldos, interés bonificable, cuota mínima, etc.). Los porcentajes se toman de la configuración editable."
+          },
+          "response": []
+        },
+        {
+          "name": "Get card movements (filtered)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cards/{{cardId}}/movements",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cards", "{{cardId}}", "movements"],
+              "query": [
+                { "key": "fromDate", "value": "2026-09-01T00:00:00", "description": "Límite inferior inclusivo (ISO). Opcional.", "disabled": true },
+                { "key": "toDate", "value": "2026-10-01T00:00:00", "description": "Límite superior exclusivo (ISO). Opcional.", "disabled": true },
+                { "key": "movementType", "value": "Compra", "description": "Compra o Pago. Opcional.", "disabled": true }
+              ]
+            },
+            "description": "Movimientos de una tarjeta (stored procedure usp_GetMovementsByCardFiltered), ordenados por fecha descendente. Activa los parámetros de query para filtrar por rango de fechas y/o tipo."
+          },
+          "response": []
+        },
+        {
+          "name": "Create card",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"1234 5678 9012\",\n  \"cardLimit\": 1500\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/{{clientId}}/cards",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clients", "{{clientId}}", "cards"]
+            },
+            "description": "Crea una tarjeta para el cliente indicado en la ruta."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Movements",
+      "item": [
+        {
+          "name": "Get all movements (filtered)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/movements",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "movements"],
+              "query": [
+                { "key": "fromDate", "value": "2026-09-01T00:00:00", "description": "Límite inferior inclusivo (ISO). Opcional.", "disabled": true },
+                { "key": "toDate", "value": "2026-10-01T00:00:00", "description": "Límite superior exclusivo (ISO). Opcional.", "disabled": true }
+              ]
+            },
+            "description": "Todos los movimientos (stored procedure usp_GetMovementsFiltered), ordenados por fecha descendente. Activa los parámetros de query para filtrar por rango de fechas."
+          },
+          "response": []
+        },
+        {
+          "name": "Get movement by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/movements/{{movementId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "movements", "{{movementId}}"]
+            },
+            "description": "Devuelve un movimiento por su Id."
+          },
+          "response": []
+        },
+        {
+          "name": "Create movement",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"movementDate\": \"2026-09-15T10:00:00\",\n  \"movementAmount\": 100.00,\n  \"movementDescription\": \"Compra de prueba\",\n  \"movementType\": 0\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cards/{{cardId}}/movements",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cards", "{{cardId}}", "movements"]
+            },
+            "description": "Crea un movimiento para la tarjeta indicada.\n\nmovementType: 0 = Compra, 1 = Pago.\n\nReglas: una Compra no puede superar el saldo disponible; un Pago no puede superar el saldo actual (devuelve 400 con el mensaje del error)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Settings",
+      "item": [
+        {
+          "name": "Get statement settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/settings/account-statement",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "settings", "account-statement"]
+            },
+            "description": "Devuelve los porcentajes configurables (interés y pago mínimo) usados para calcular el estado de cuenta."
+          },
+          "response": []
+        },
+        {
+          "name": "Update statement settings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"interestPercentage\": 25,\n  \"minimumPaymentPercentage\": 5\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/settings/account-statement",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "settings", "account-statement"]
+            },
+            "description": "Actualiza los porcentajes configurables. Ambos deben estar entre 0 y 100 (FluentValidation devuelve 400 si no)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Health check (incluye verificación de la base de datos). Devuelve 'Healthy' cuando todo está bien."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "https://localhost:7125", "type": "string" },
+    { "key": "clientId", "value": "1", "type": "string" },
+    { "key": "cardId", "value": "1", "type": "string" },
+    { "key": "movementId", "value": "1", "type": "string" }
+  ]
+}

@@ -163,4 +163,33 @@ public class ApiClient : IApiClient
         await EnsureSuccessOrThrowAsync(response);
         return await response.Content.ReadFromJsonAsync<AccountStatementSettings>();
     }
+
+    // ---------- Health ----------
+
+    public async Task<ApiHealth> GetHealthAsync()
+    {
+        try
+        {
+            // The API exposes the health check at the root ("/health"),
+            // returning 200 "Healthy" or 503 "Unhealthy".
+            var response = await _httpClient.GetAsync("health");
+            var body = (await response.Content.ReadAsStringAsync()).Trim();
+
+            return new ApiHealth
+            {
+                IsHealthy = response.IsSuccessStatusCode,
+                Status = string.IsNullOrWhiteSpace(body)
+                    ? (response.IsSuccessStatusCode ? "Healthy" : "Unhealthy")
+                    : body
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ApiHealth
+            {
+                IsHealthy = false,
+                Status = "No se pudo conectar con la API. " + ex.Message
+            };
+        }
+    }
 }
