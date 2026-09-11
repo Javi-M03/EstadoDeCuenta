@@ -12,8 +12,14 @@ namespace EstadoDeCuenta.Domain.Interfaces
         Task<Movement?> GetByIdAsync(int id);
         Task<IEnumerable<Movement>> GetByCardIdAsync(int cardId);
         Task<IEnumerable<Movement>> GetByCardIdAndDateAsync(int cardId, DateTime startDate, DateTime endDate);
+        Task<IEnumerable<Movement>> GetByCardIdFilteredAsync(
+            int cardId,
+            DateTime? fromDate,
+            DateTime? toDate,
+            Enums.MovementTypeEnum? movementType);
         Task<Movement> AddAsync(Movement movement);
         Task<IEnumerable<Movement>> GetAllAsync();
+        Task<IEnumerable<Movement>> GetAllFilteredAsync(DateTime? fromDate, DateTime? toDate);
 
     }
 }

@@ -21,6 +21,9 @@ using EstadoDeCuenta.Services.CQRS.Queries.Clients.GetClients;
 using EstadoDeCuenta.Services.CQRS.Queries.GetCardStatements;
 using EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovementById;
 using EstadoDeCuenta.Services.CQRS.Queries.Movements.GetMovements;
+using EstadoDeCuenta.Services.CQRS.Queries.Settings.GetAccountStatementSettings;
+using EstadoDeCuenta.Services.CQRS.Commands.Settings.UpdateAccountStatementSettings;
+using EstadoDeCuenta.DTOs.Settings;
 using EstadoDeCuenta.Services.Mapping;
 using EstadoDeCuenta.Services.Services;
 using FluentValidation;
@@ -43,6 +46,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IMovementRepository, MovementRepository>();
+builder.Services.AddScoped<ISettingsRepository, SettingsRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<AccountStatementCalculator>();
 builder.Services.AddHealthChecks().AddDbContextCheck<AppDBContext>();
@@ -61,17 +65,17 @@ builder.Services.AddScoped<IQueryHandler<GetMovementByIdQuery, MovementResponseD
 builder.Services.AddScoped<IQueryHandler<GetCardsByClientIdQuery,IEnumerable<CardResponseDto>>, GetCardsByClientIdQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetMovementsByCardIdQuery,IEnumerable<MovementResponseDto>>, GetMovementsByCardIdQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetCardStatementQuery, AccountStatementDto>, GetCardStatementQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetAccountStatementSettingsQuery, AccountStatementSettingsDto>, GetAccountStatementSettingsQueryHandler>();
+builder.Services.AddScoped<ICommandHandler<UpdateAccountStatementSettingsCommand, AccountStatementSettingsDto>, UpdateAccountStatementSettingsCommandHandler>();
 
 var app = builder.Build();
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Swagger habilitado en todos los entornos (incluye Azure) para poder
+// explorar y probar la API desde la URL pública.
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

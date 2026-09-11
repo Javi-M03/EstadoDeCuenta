@@ -22,6 +22,35 @@ namespace EstadoDeCuenta.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("EstadoDeCuenta.Domain.Entities.AccountStatementSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("InterestPercentage")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("MinimumPaymentPercentage")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AccountStatementSettings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            InterestPercentage = 25m,
+                            MinimumPaymentPercentage = 5m
+                        });
+                });
+
             modelBuilder.Entity("EstadoDeCuenta.Domain.Entities.Card", b =>
                 {
                     b.Property<int>("CardId")

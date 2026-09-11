@@ -11,6 +11,7 @@ namespace EstadoDeCuenta.Domain.Interfaces
         IClientRepository Clients { get; }
         ICardRepository Cards { get; }
         IMovementRepository Movements { get; }
+        ISettingsRepository Settings { get; }
         Task<int> SaveChangesAsync();
     }
 }

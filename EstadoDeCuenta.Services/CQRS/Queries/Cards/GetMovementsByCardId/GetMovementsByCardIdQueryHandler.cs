@@ -27,7 +27,11 @@ namespace EstadoDeCuenta.Services.CQRS.Queries.Cards.GetMovementsByCardId
                     $"No se encontró la tarjeta con Id {query.CardId}.");
             }
 
-            var movements = await _unitOfWork.Movements.GetByCardIdAsync(query.CardId);
+            var movements = await _unitOfWork.Movements.GetByCardIdFilteredAsync(
+                query.CardId,
+                query.FromDate,
+                query.ToDate,
+                query.MovementType);
 
             return _mapper.Map<IEnumerable<MovementResponseDto>>(movements);
         }

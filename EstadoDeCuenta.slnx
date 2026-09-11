@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="CardsFrontend/CardsFrontend.csproj" />
   <Project Path="EstadoDeCuenta.API/EstadoDeCuenta.API.csproj" />
   <Project Path="EstadoDeCuenta.Domain/EstadoDeCuenta.Domain.csproj" />
   <Project Path="EstadoDeCuenta.DTOs/EstadoDeCuenta.DTOs.csproj" />

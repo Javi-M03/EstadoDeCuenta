@@ -16,9 +16,4 @@
     <PackageReference Include="AutoMapper" Version="13.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CQRS\Commands\CreatePayment\" />
-    <Folder Include="CQRS\Commands\GetClients\" />
-  </ItemGroup>
-
 </Project>

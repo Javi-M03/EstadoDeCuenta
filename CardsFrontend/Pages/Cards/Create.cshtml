@@ -1,0 +1,20 @@
+@page "{clientId:int}"
+@model CardsFrontend.Pages.Cards.CreateModel
+@{
+    ViewData["Title"] = "New Card";
+}
+<h1>Nueva Tarjeta para @(Model.Client?.ClientName ?? $"Client {Model.ClientId}")</h1>
+<div asp-validation-summary="All" class="alert alert-danger" role="alert" style="@(Model.ModelState.ErrorCount == 0 ? "display:none" : "")"></div>
+<form method="post">
+    <input type="hidden" asp-for="ClientId" />
+    <div class="mb-3">
+        <label class="form-label" asp-for="Card.CardNumber"> Numero de Tarjeta</label>
+        <input class="form-control" asp-for="Card.CardNumber" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Card.CardLimit">Limite</label>
+        <input class="form-control" asp-for="Card.CardLimit" />
+    </div>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Crear</button>
+    <a class="btn btn-secondary" asp-page="/Clients/Details" asp-route-clientId="@Model.ClientId"><i class="bi bi-x-lg"></i> Cancelar</a>
+</form>

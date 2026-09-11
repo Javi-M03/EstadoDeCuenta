@@ -67,6 +67,16 @@ namespace EstadoDeCuenta.Services.CQRS.Commands.CreateMovement
                 }
             }
 
+            //Calculamos saldo a pagar (si es pago)
+            if(command.MovementType == MovementTypeEnum.Pago)
+            {
+
+                if(command.MovementAmount > currentBalance)
+                {
+                    throw new InvalidOperationException("No se aceptan sobregiros");
+                }
+            }
+
             // Command -> Entity
             var movement = _mapper.Map<Movement>(command);
 

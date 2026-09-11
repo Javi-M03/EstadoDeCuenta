@@ -1,0 +1,14 @@
+@page
+@model CardsFrontend.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+<div class="text-center">
+    <h1 class="display-5">Estado De Cuenta</h1>
+    <p class="lead">Aplicación web para adminsitradores que permitir visualizar el estado de cuenta de las tarjetas de crédito existentes según los clientes.</p>
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <a class="btn btn-primary" asp-page="/Clients/Index"><i class="bi bi-person"></i> Ver Clientes</a>
+        <a class="btn btn-primary" asp-page="/Cards/Index"><i class="bi bi-credit-card"></i> Ver Tarjetas</a>
+        <a class="btn btn-primary" asp-page="/Movements/Index"><i class="bi bi-arrow-left-right"></i> Ver Movimientos</a>
+    </div>
+</div>
